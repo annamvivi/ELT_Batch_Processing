@@ -1,13 +1,13 @@
 import requests
 import json
 import os
-from hdfs import InsecureClient  # Import the hdfs library
+from hdfs import InsecureClient
 
 # Specify the specific path where you want to create the "weather_data" directory
 weather_path = "/mnt/c/linux/ETL_Project/Python_ETL_Adv_Works/data"
 
 # Define the API URL
-api_url = "https://archive-api.open-meteo.com/v1/archive?latitude=52.52&longitude=13.41&start_date=2023-05-01&end_date=2023-08-31&hourly=temperature_2m,relativehumidity_2m,dewpoint_2m,apparent_temperature,rain,pressure_msl,surface_pressure,vapor_pressure_deficit,soil_temperature_0_to_7cm,soil_temperature_7_to_28cm,soil_temperature_28_to_100cm,soil_temperature_100_to_255cm,soil_moisture_0_to_7cm,soil_moisture_7_to_28cm,soil_moisture_28_to_100cm,soil_moisture_100_to_255cm"
+api_url = "https://archive-api.open-meteo.com/v1/archive?latitude=-5&longitude=120&start_date=2023-07-01&end_date=2023-08-31&hourly=temperature_2m,relativehumidity_2m,dewpoint_2m,apparent_temperature,rain,pressure_msl,surface_pressure,cloudcover,et0_fao_evapotranspiration,vapor_pressure_deficit,soil_temperature_0_to_7cm,soil_temperature_7_to_28cm,soil_temperature_28_to_100cm,soil_temperature_100_to_255cm,soil_moisture_0_to_7cm,soil_moisture_7_to_28cm,soil_moisture_28_to_100cm,soil_moisture_100_to_255cm&timezone=Asia%2FSingapore"
 
 # Send the API request
 response = requests.get(api_url)
@@ -29,10 +29,11 @@ if response.status_code == 200:
     print(f"JSON data saved locally to {file_path}")
 
     # Now, upload the local file to HDFS (Hadoop Distributed File System)
-    hdfs_client = InsecureClient("localhost:9000", user="anna")
+    hdfs_client = InsecureClient("http://localhost:9870", user="anna")
+  # Use default configuration
     
     # Define the HDFS path where you want to store the JSON data
-    hdfs_path = "/anna/test1"
+    hdfs_path = "/user/anna/weather_data.json"
     
     # Upload the local file to HDFS
     hdfs_client.upload(hdfs_path, file_path)
