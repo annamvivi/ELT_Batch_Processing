@@ -11,7 +11,7 @@ def json_serializer(data):
 
 if __name__ == "__main__":
     # Specify the full path to the JSON file
-    file_path = "/mnt/c/linux/ETL_Project/Python_ETL_Adv_Works/data/weather_data/reformatted_weather_data.json"
+    file_path = "/mnt/c/linux/ETL_Project/Python_ETL_Adv_Works/data/weather_data/weather_data_transformed_final.json"
 
     # Check if the file exists at the specified path
     if not os.path.exists(file_path):

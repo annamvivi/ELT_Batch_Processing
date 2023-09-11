@@ -1,37 +1,37 @@
 version: '3' 
 services:
 
-  namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
-    container_name: namenode
-    volumes:
-      - /tmp/hdfs/namenode:/hadoop/dfs/name
-    environment:
-      - CLUSTER_NAME=test
-    env_file:
-      - ./hadoop-hive.env
-    ports:
-      - "50070:50070"
-    networks:
-      net_pet:
-        ipv4_address: 172.27.1.5
+  # namenode:
+  #   image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+  #   container_name: namenode
+  #   volumes:
+  #     - /tmp/hdfs/namenode:/hadoop/dfs/name
+  #   environment:
+  #     - CLUSTER_NAME=test
+  #   env_file:
+  #     - ./hadoop-hive.env
+  #   ports:
+  #     - "50070:50070"
+  #   networks:
+  #     net_pet:
+  #       ipv4_address: 172.27.1.5
   
-  datanode:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
-    container_name: datanode
-    volumes:
-      - /tmp/hdfs/datanode:/hadoop/dfs/data
-    env_file:
-      - ./hadoop-hive.env
-    environment:
-      SERVICE_PRECONDITION: "namenode:50070"
-    depends_on:
-      - namenode
-    ports:
-      - "50075:50075"
-    networks:
-      net_pet:
-        ipv4_address: 172.27.1.6
+  # datanode:
+  #   image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+  #   container_name: datanode
+  #   volumes:
+  #     - /tmp/hdfs/datanode:/hadoop/dfs/data
+  #   env_file:
+  #     - ./hadoop-hive.env
+  #   environment:
+  #     SERVICE_PRECONDITION: "namenode:50070"
+  #   depends_on:
+  #     - namenode
+  #   ports:
+  #     - "50075:50075"
+  #   networks:
+  #     net_pet:
+  #       ipv4_address: 172.27.1.6
   
   # hive-server:
   #   image: bde2020/hive:2.3.2-postgresql-metastore
@@ -74,63 +74,63 @@ services:
   #     net_pet:
   #       ipv4_address: 172.27.1.9
     
-  # spark-master:
-  #   image: bde2020/spark-master:2.4.0-hadoop2.7
-  #   container_name: spark-master
-  #   ports:
-  #     - 8080:8080
-  #     - 7077:7077
-  #   environment:
-  #     - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-  #   env_file:
-  #     - ./hadoop-hive.env
-  #   networks:
-  #     net_pet:
-  #       ipv4_address: 172.27.1.10
-     
-  # spark-worker:
-  #   image: bde2020/spark-worker:2.4.0-hadoop2.7
-  #   container_name: spark-worker
-  #   depends_on:
-  #     - spark-master
-  #   environment:
-  #     - SPARK_MASTER=spark://spark-master:7077
-  #     - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-  #     - HIVE_CORE_CONF_javax_jdo_option_ConnectionURL=jdbc:postgresql://hive-metastore/metastore
-  #   ports:
-  #     - 8081:8081
-  #   env_file:
-  #     - ./hadoop-hive.env
-  #   networks:
-  #     net_pet:
-  #       ipv4_address: 172.27.1.11
-
-  database:
-      image: mysql:5.7
-      container_name: mysql_db
-      ports:
-          - "33061:3306"
-      command: --init-file /data/application/init.sql
-      volumes:
-          - /tmp/mysql/data:/var/lib/mysql
-          - ./init.sql:/data/application/init.sql
-      environment:
-          MYSQL_ROOT_USER: root
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: hue
-          MYSQL_USER: root
-          MYSQL_PASSWORD: secret
-      networks:
-        net_pet:
-          ipv4_address: 172.27.1.14
-
-  streamsets:
-    image: streamsets/datacollector:3.13.0-latest
+  spark-master:
+    image: bde2020/spark-master:2.4.0-hadoop2.7
+    container_name: spark-master
     ports:
-      - "18630:18630"
+      - 8080:8080
+      - 7077:7077
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+    env_file:
+      - ./hadoop-hive.env
     networks:
       net_pet:
-        ipv4_address: 172.27.1.17  
+        ipv4_address: 172.27.1.10
+     
+  spark-worker:
+    image: bde2020/spark-worker:2.4.0-hadoop2.7
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - HIVE_CORE_CONF_javax_jdo_option_ConnectionURL=jdbc:postgresql://hive-metastore/metastore
+    ports:
+      - 8081:8081
+    env_file:
+      - ./hadoop-hive.env
+    networks:
+      net_pet:
+        ipv4_address: 172.27.1.11
+
+  # database:
+  #     image: mysql:5.7
+  #     container_name: mysql_db
+  #     ports:
+  #         - "33061:3306"
+  #     command: --init-file /data/application/init.sql
+  #     volumes:
+  #         - /tmp/mysql/data:/var/lib/mysql
+  #         - ./init.sql:/data/application/init.sql
+  #     environment:
+  #         MYSQL_ROOT_USER: root
+  #         MYSQL_ROOT_PASSWORD: secret
+  #         MYSQL_DATABASE: hue
+  #         MYSQL_USER: root
+  #         MYSQL_PASSWORD: secret
+  #     networks:
+  #       net_pet:
+  #         ipv4_address: 172.27.1.14
+
+  # streamsets:
+  #   image: streamsets/datacollector:3.13.0-latest
+  #   ports:
+  #     - "18630:18630"
+  #   networks:
+  #     net_pet:
+  #       ipv4_address: 172.27.1.17  
 
 networks:
   net_pet:
