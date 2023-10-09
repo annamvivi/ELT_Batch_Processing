@@ -10,7 +10,7 @@ if __name__ == "__main__":
     connector = SparkHDFSConnector(hdfs_url, hdfs_user, spark_app_name, spark_master_url)
 
     # Define the Parquet file path
-    parquet_file_path = "hdfs://localhost:9000/user/anna/flight_data/Flight_Delay.parquet"
+    parquet_file_path = "hdfs://localhost:9000/user/anna/flight_data/features_added.parquet"
 
     # Read and show the Parquet file using the connector
     df = connector.read_parquet_from_hdfs(parquet_file_path)
@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     # Read and print the schema for the Parquet file using the reader
     df = hdfs_reader.read_parquet_file(parquet_file_path)
-    hdfs_reader.show_dataframe(df)
+    #hdfs_reader.show_dataframe(df)
     hdfs_reader.print_schema(df)
 
     # Close the Spark session for other operations
