@@ -29,5 +29,14 @@ if __name__ == "__main__":
     #hdfs_reader.show_dataframe(df)
     hdfs_reader.print_schema(df)
 
+    # Load the Parquet data
+    parquet_data = hdfs_reader.read_parquet_file(parquet_file_path)
+
+    # Handle missing values
+    parquet_data = parquet_data.dropna(subset=["DepDelay", "CarrierDelay", "WeatherDelay", "SecurityDelay"])
+
     # Close the Spark session for other operations
     hdfs_reader.close_spark_session()
+
+
+

@@ -1,0 +1,8 @@
+{
+    "hdinsightJobSubmission.ClusterConf": [
+        {
+            "name": "admin: http://http://localhost:8080/ (admin)",
+            "filePath": "/mnt/c/linux/ETL_Project/Python_ETL_Adv_Works/xxx.py"
+        }
+    ]
+}
